@@ -64,7 +64,7 @@ public:
 
 
 
-template<class T>
+template<typename T>
 //template function 
 int sum(vector<T>& vec, int n) {
    int sum = 0;
