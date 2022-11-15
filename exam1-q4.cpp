@@ -60,20 +60,22 @@ public:
       return (m_name < stud.m_name);
    }
 
+   int operator() (int s) { return s; }
+
 };
 
 
 
-template<typename T>
-//template function 
-int sum(vector<T>& vec, int n) {
-   int sum = 0;
-   for (auto stud : vec) {
-      sum += stud.getGrade();
-   }
-   return sum;
-
-}
+//template<typename T>
+////template function 
+//int sum(vector<T>& vec, int n) {
+//   int sum = 0;
+//   for (auto stud : vec) {
+//      sum += stud.getGrade();
+//   }
+//   return sum;
+//
+//}
 
 //function headers
 void mainMenu();
@@ -84,7 +86,7 @@ int main() {
 
    int  choice = -1;
    int grade, id, min = 100, max = 0;
-   int sumS; 
+   int sumS = 0;
    double average = 0.00;
    string name;
 
@@ -149,11 +151,15 @@ int main() {
          cout << "\n\nSummary" << "\n........." << endl;
          cout << "Max grade is: " << max << endl;
          cout << "Min grade is: " << min << endl;
-         //cout << "sum grades is :" << sum << endl;
+         for (iter = vec.begin(); iter != vec.end(); iter++) {
+            sumS += student(iter->getGrade());
+         }
+         cout << "sum grades is :" << sumS << endl;
 
-         sumS = sum(vec, vec.size());
-         average = sumS / vec.size(); 
-         cout << "Average grade is: " << fixed << setprecision(2) <<average;
+        
+
+         average = sumS / vec.size();
+         cout << "Average grade is: " << fixed << setprecision(2) << average;
 
          break;
       case 0:
@@ -197,7 +203,7 @@ void mainMenu() {
 
 
 /*SAMPLE OUTPUT
-* 
+*
 *******************************************************
                 Welcome To Anna's App
 *******************************************************
