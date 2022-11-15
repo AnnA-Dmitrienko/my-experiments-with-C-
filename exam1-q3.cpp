@@ -7,12 +7,13 @@ using namespace std;
 
 
 class StudentRecord {
+public:
    string m_name;
    int m_grade;
    int m_id;
 
-public:
-   //default constructor
+
+   //parameterized constructor
    StudentRecord(string name = "John", int grade = 0, int id = 00000) {
       m_name = name;
       m_grade = grade;
@@ -23,21 +24,29 @@ public:
 
 
    void setName(string name_) {
-      m_name = name_;
+      if (validateString(name_)) {
+         m_name = name_;
+      }
+      else m_name = "unknown";
 
    }
    void setGrade(int grade_) {
       if (grade_ <= 100 && grade_ >= 0) {
          m_grade = grade_;
       }
-      else m_grade = 0;
+      else if (grade_ > 100) {
+         m_grade = 100;
+      }
+      else {
+         m_grade = 30;
+      }
    }
    void setId(int id_) {
-      if (id_ >= 0) {
+      if (id_ >= 100 && id_<=999) {
          m_id = id_;
       }
       else {
-         m_id = 0;
+         m_id = 100;
       }
    }
 
@@ -50,8 +59,17 @@ public:
       return (m_name < stud.m_name);
    }
 
-};
+   bool validateString(const std::string& s)
+   {
+      for (const char c : s) {
+         if (!isalpha(c) && !isspace(c))
+            return false;
+      }
 
+      return true;
+   }
+
+};
 
 
 
@@ -64,7 +82,7 @@ void goodbye();
 int main() {
 
    int  choice = -1;
-   int grade, id, min=100, max=0;
+   int grade, id, min = 100, max = 0;
    int sum = 0;
    string name;
 
@@ -72,31 +90,43 @@ int main() {
 
    StudentRecord student;
    vector<StudentRecord> vec;
-   vector<StudentRecord>::iterator iter; 
+   vector<StudentRecord>::iterator iter;
 
-   
+
+
+
    while (choice != 0) {
       mainMenu();
       cout << "Enter your choice: ";
-      cin >> choice;
+      while (!(cin >> choice)) {
+         cin.clear();
+         cin.ignore(1000, '\n');
+         cout << "\nBad data, try again!" << endl;
+         cout << "Enter your choice: ";
+      }
       cin.ignore();
 
       switch (choice) {
       case 1:
-         
+
+         cout << "Enter Student name: ";
+         while (!(cin >> name)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "\nBad data, try again!" << endl;
             cout << "Enter Student name: ";
-            cin >> name;
-            cout << "Enter Student grade: ";
-            cin >> grade;
-            cout << "Enter Student id: ";
-            cin >> id;
+         }
+         cout << "Enter Student grade: ";
+         cin >> grade;
+         cout << "Enter Student id: (XXX) ";
+         cin >> id;
 
-            student.setName(name);
-            student.setId(id);
-            student.setGrade(grade);
+         student.setName(name);
+         student.setId(id);
+         student.setGrade(grade);
 
-            vec.push_back(student);
-           
+         vec.push_back(student);
+
 
          break;
       case 2:
@@ -105,22 +135,23 @@ int main() {
             {
                return lhs.getName() < rhs.getName();
             });
-         
-      
 
-         for (iter = vec.begin() ; iter != vec.end(); iter++) {
+
+
+         for (iter = vec.begin(); iter != vec.end(); iter++) {
             cout << "\nDisplay Students" << "\n.............." << endl;
             cout << "student name: " << iter->getName() << endl;
             cout << "student grade: " << iter->getGrade() << endl;
             cout << "student id: " << iter->getID() << endl;
          }
 
-       
+
          for (iter = vec.begin(); iter != vec.end(); iter++) {
             sum += iter->getGrade();
          }
 
-         for (iter = vec.begin(); iter != vec.end(); iter++) {
+
+        for (iter = vec.begin(); iter != vec.end(); iter++) {
             if (max < iter->getGrade()) {
                max = iter->getGrade();
             }
@@ -131,15 +162,15 @@ int main() {
                min = iter->getGrade();
             }
          }
-
-
-         
-         cout << "\n\nSummary" << "\n........." << endl;
-         cout << "Max grade is: " << max<<endl;
-         cout << "Min grade is: "<<min<<endl;
-         //cout << "sum grades is :" << sum << endl;
-         cout << "Average grade is: "<<sum/vec.size();
      
+
+
+         cout << "\n\nSummary" << "\n........." << endl;
+         cout << "Max grade is: " << max << endl;
+         cout << "Min grade is: " << min << endl;
+         //cout << "sum grades is :" << sum << endl;
+         cout << "Average grade is: " << sum / vec.size();
+
          break;
       case 0:
          goodbye();
